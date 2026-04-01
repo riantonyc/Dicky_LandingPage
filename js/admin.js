@@ -543,6 +543,23 @@
         }
       }
     }
+
+    var themeResetBtn = document.getElementById('btn-reset-theme');
+    if(themeResetBtn) {
+      themeResetBtn.onclick = async function() {
+        if(confirm('Kembalikan warna tema ke bawaan awal? Semua seting warna saat ini akan dihapus.')) {
+          try {
+            var payload = { primaryColor: '', primaryContainerColor: '', surfaceColor: '', textColor: '' };
+            await apiFetch('/api/settings', { method:'POST', body: JSON.stringify(payload) });
+            Object.assign(state.settings, payload);
+            renderPengaturanTab(); // to visually reset inputs
+            showToast('Warna tema berhasil dikembalikan ke default. Cek landing page.');
+          } catch(err) {
+            showToast('Gagal mereset warna.', 'error');
+          }
+        }
+      };
+    }
   }
 
   // ─── Image Upload via FileReader ──────────────────────────────────────────────

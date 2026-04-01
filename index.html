@@ -310,19 +310,19 @@
 
         <!-- Mobile Menu Slide-in -->
         <div id="mobileMenu"
-            class="mobile-menu md:hidden fixed top-0 right-0 h-full w-64 bg-stone-50 dark:bg-stone-900 shadow-2xl z-50 p-6">
+            class="mobile-menu md:hidden fixed top-0 right-0 h-full w-full max-w-[280px] bg-surface shadow-2xl p-6" style="z-index: 999; border-left: 1px solid var(--color-primary-container, #e4e2dc);">
             <button id="closeMobileMenu"
-                class="material-symbols-outlined text-stone-800 dark:text-stone-100 mb-8 cursor-pointer"
+                class="material-symbols-outlined text-on-surface mb-8 cursor-pointer text-2xl"
                 aria-label="Close menu">close</button>
             <nav class="flex flex-col space-y-6" aria-label="Mobile navigation">
-                <a class="text-stone-900 dark:text-stone-50 font-bold font-headline tracking-tight text-lg hover:text-primary transition-colors"
-                    href="#work">Work</a>
-                <a class="text-stone-500 dark:text-stone-400 font-headline tracking-tight text-lg hover:text-stone-900 dark:hover:text-stone-50 transition-colors"
-                    href="#gallery">Gallery</a>
-                <a class="text-stone-500 dark:text-stone-400 font-headline tracking-tight text-lg hover:text-stone-900 dark:hover:text-stone-50 transition-colors"
-                    href="#blog">Blog</a>
-                <a class="text-stone-500 dark:text-stone-400 font-headline tracking-tight text-lg hover:text-stone-900 dark:hover:text-stone-50 transition-colors"
-                    href="#contact">Contact</a>
+                <a class="text-on-surface font-bold font-headline tracking-tight text-xl hover:text-primary transition-colors"
+                    href="#work" onclick="document.getElementById('mobileMenu').classList.remove('active')">Work</a>
+                <a class="text-on-surface-variant font-headline tracking-tight text-xl hover:text-on-surface transition-colors"
+                    href="#gallery" onclick="document.getElementById('mobileMenu').classList.remove('active')">Gallery</a>
+                <a class="text-on-surface-variant font-headline tracking-tight text-xl hover:text-on-surface transition-colors"
+                    href="#blog" onclick="document.getElementById('mobileMenu').classList.remove('active')">Blog</a>
+                <a class="text-on-surface-variant font-headline tracking-tight text-xl hover:text-on-surface transition-colors"
+                    href="#contact" onclick="document.getElementById('mobileMenu').classList.remove('active')">Contact</a>
             </nav>
         </div>
     </header>
