@@ -250,7 +250,17 @@
     var menuToggle = document.getElementById('sidebar-toggle');
     var sidebar = document.getElementById('sidebar');
     if (menuToggle && sidebar) {
-      menuToggle.onclick = function () { sidebar.classList.toggle('sidebar-open'); };
+      menuToggle.onclick = function (e) {
+        e.stopPropagation();
+        sidebar.classList.toggle('sidebar-open');
+      };
+      document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768 && sidebar.classList.contains('sidebar-open')) {
+          if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+            sidebar.classList.remove('sidebar-open');
+          }
+        }
+      });
     }
     document.querySelectorAll('[data-tab]').forEach(function (btn) {
       btn.addEventListener('click', function () { if (sidebar) sidebar.classList.remove('sidebar-open'); });

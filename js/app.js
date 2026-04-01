@@ -165,11 +165,61 @@
   }
 
   // ─── Behaviors ───────────────────────────────────────────────────────────────
-  function initDarkMode(){/* kept standard tailwind log */}
-  function initMobileMenu(){/* toggle handler */}
-  function initFilter(){/* masonry filter */}
-  function initLazyLoad(){/* lazy */}
-  function initSmoothScroll(){/* smooth */}
+  function initDarkMode(){
+    var toggle = document.getElementById('darkModeToggle');
+    if (!toggle) return;
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    toggle.addEventListener('click', function() {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    });
+  }
+
+  function initMobileMenu(){
+    var btn = document.getElementById('mobileMenuButton');
+    var menu = document.getElementById('mobileMenu');
+    var closeBtn = document.getElementById('closeMobileMenu');
+    if(!btn || !menu || !closeBtn) return;
+    
+    btn.addEventListener('click', function() { menu.classList.add('active'); });
+    closeBtn.addEventListener('click', function() { menu.classList.remove('active'); });
+    document.addEventListener('click', function(e) {
+      if (menu.classList.contains('active') && !menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.classList.remove('active');
+      }
+    });
+  }
+
+  function initFilter(){
+    var btns = document.querySelectorAll('.filter-btn');
+    if (btns.length === 0) return;
+    btns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var filter = this.getAttribute('data-filter');
+        btns.forEach(function(b){
+          b.classList.remove('bg-secondary-container', 'text-on-secondary-container');
+          b.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+        });
+        this.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+        this.classList.add('bg-secondary-container', 'text-on-secondary-container');
+        
+        document.querySelectorAll('.gallery-item').forEach(function(item) {
+          if (filter === 'all' || item.getAttribute('data-category') === filter) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  function initLazyLoad(){}
+  function initSmoothScroll(){}
   function initAdminShortcut() {
     document.addEventListener('keydown', function(e){ if(e.ctrlKey && e.shiftKey && e.code==='KeyA'){ e.preventDefault(); window.location.href='admin.html';}});
   }
