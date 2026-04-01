@@ -444,7 +444,7 @@
 
     <!-- Sidebar -->
     <aside id="sidebar" class="sidebar">
-        <div class="sidebar-logo">Dicky Wahyu<br/><span style="font-size:0.7rem; color:#5f5f5a; font-family:'Manrope',sans-serif; font-style:normal; font-weight:500;">Admin Panel</span></div>
+        <div class="sidebar-logo"><span id="sidebar-logo-text">Dicky Wahyu</span><br/><span style="font-size:0.7rem; color:#5f5f5a; font-family:'Manrope',sans-serif; font-style:normal; font-weight:500;">Admin Panel</span></div>
 
         <nav class="sidebar-nav">
             <button class="tab-btn" data-tab="gallery">
@@ -647,20 +647,7 @@
                     </form>
                 </div>
 
-                <!-- Export / Import -->
-                <div class="settings-card">
-                    <h3>💾 Backup & Restore Data</h3>
-                    <p class="text-sm text-on-surface-variant mb-4">Export semua konten (galeri, renungan, profil) ke file JSON sebagai backup, atau import dari backup sebelumnya.</p>
-                    <div class="flex gap-3 flex-wrap">
-                        <button id="btn-export" class="btn-export">
-                            <span class="material-symbols-outlined text-sm">download</span> Export JSON
-                        </button>
-                        <button id="btn-import" class="btn-secondary">
-                            <span class="material-symbols-outlined text-sm">upload</span> Import JSON
-                        </button>
-                        <input type="file" id="import-file" accept=".json" style="display:none;"/>
-                    </div>
-                </div>
+
 
                 <!-- Reset -->
                 <div class="settings-card" style="border-color: #fd795a;">

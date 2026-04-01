@@ -43,8 +43,26 @@
   }
 
   // ─── UI Helpers ──────────────────────────────────────────────────────────────
-  function showEl(id) { var el = document.getElementById(id); if (el) el.style.display = ''; }
-  function hideEl(id) { var el = document.getElementById(id); if (el) el.style.display = 'none'; }
+  function showEl(id) { 
+    var el = document.getElementById(id); 
+    if (!el) return;
+    if (id.startsWith('modal')) {
+      el.style.display = 'flex';
+      setTimeout(function() { el.classList.add('modal-visible'); }, 10);
+    } else {
+      el.style.display = ''; 
+    }
+  }
+  function hideEl(id) { 
+    var el = document.getElementById(id); 
+    if (!el) return;
+    if (id.startsWith('modal')) {
+      el.classList.remove('modal-visible');
+      setTimeout(function() { el.style.display = 'none'; }, 250);
+    } else {
+      el.style.display = 'none'; 
+    }
+  }
   function setText(id, text) { var el = document.getElementById(id); if (el) el.textContent = text || ''; }
   function setError(id, msg) { var el = document.getElementById(id); if (el) { el.textContent = msg; el.style.display = msg ? '' : 'none'; }}
   
@@ -217,6 +235,7 @@
     }
 
     setText('dash-owner-name', state.settings.ownerName || 'Admin');
+    setText('sidebar-logo-text', state.settings.ownerName || 'Dicky Wahyu');
 
     // Sidebar navigation
     document.querySelectorAll('[data-tab]').forEach(function (btn) {
@@ -306,6 +325,8 @@
 
     var galleryForm = document.getElementById('gallery-modal-form');
     if(galleryForm) galleryForm.onsubmit = function(e){ e.preventDefault(); saveGalleryItem(); };
+    
+    setupImageUpload('gallery-upload-drop', 'gallery-modal-file', 'gallery-modal-url', 'gallery-modal-preview');
   });
 
   function openGalleryModal(id) {
@@ -475,8 +496,13 @@
           })
         });
         showToast('Profil disimpan! Reload website.');
+        setText('dash-owner-name', document.getElementById('profil-ownerName').value || 'Admin');
+        setText('sidebar-logo-text', document.getElementById('profil-ownerName').value || 'Dicky Wahyu');
       } catch(e) { showToast('Gagal menyimpan', 'error'); }
     }
+    
+    // Setup file uploader
+    setupImageUpload('profil-upload-drop', 'profil-hero-file', 'profil-heroSrc', 'profil-hero-preview');
   }
 
   function renderPengaturanTab() {
@@ -507,6 +533,51 @@
         }
       }
     }
+  }
+
+  // ─── Image Upload via FileReader ──────────────────────────────────────────────
+  function setupImageUpload(dropId, fileId, urlInputId, previewId) {
+    var dropArea = document.getElementById(dropId);
+    var fileInput = document.getElementById(fileId);
+    if (!dropArea || !fileInput) return;
+
+    dropArea.onclick = function () { fileInput.click(); };
+
+    fileInput.onchange = function (e) {
+      if (!e.target.files || !e.target.files[0]) return;
+      var file = e.target.files[0];
+      if (file.size > 5 * 1024 * 1024) { showToast('Ukuran maksimal 5MB', 'error'); return; }
+
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        var base64 = ev.target.result;
+        var urlInput = document.getElementById(urlInputId);
+        var preview = document.getElementById(previewId);
+        if (urlInput) urlInput.value = base64;
+        if (preview) { preview.src = base64; preview.style.display = 'block'; }
+      };
+      reader.readAsDataURL(file);
+    };
+
+    dropArea.ondragover = function (e) {
+      e.preventDefault();
+      dropArea.style.borderColor = '#795844';
+      dropArea.style.background = '#f6f3ee';
+    };
+    dropArea.ondragleave = function (e) {
+      e.preventDefault();
+      dropArea.style.borderColor = '';
+      dropArea.style.background = '';
+    };
+    dropArea.ondrop = function (e) {
+      e.preventDefault();
+      dropArea.style.borderColor = '';
+      dropArea.style.background = '';
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        fileInput.files = e.dataTransfer.files;
+        fileInput.dispatchEvent(new Event('change'));
+      }
+    };
   }
 
 })();
