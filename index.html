@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Dicky Wahyu — Digital Storyteller & Creative Curator. Crafting soulful narratives through intentional visuals."/>
+    <title>Dicky Wahyu | Creative Content Creator</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-dim": "#4b564e",
+                        "surface-container-highest": "#e4e2dc",
+                        "secondary-container": "#dae5dc",
+                        "on-surface": "var(--color-text, #32332f)",
+                        "tertiary": "#6a5c58",
+                        "on-secondary": "#f1fcf2",
+                        "on-primary-container": "#654633",
+                        "primary-container": "var(--color-primary-container, #fed1b7)",
+                        "surface": "var(--color-surface, #fcf9f5)",
+                        "on-primary-fixed-variant": "#6f4f3b",
+                        "tertiary-fixed-dim": "#ecd9d4",
+                        "tertiary-container": "#fbe7e2",
+                        "primary-fixed": "var(--color-primary-container, #fed1b7)",
+                        "surface-container-low": "#f6f3ee",
+                        "primary": "var(--color-primary, #795844)",
+                        "on-secondary-fixed-variant": "#545e57",
+                        "background": "var(--color-surface, #fcf9f5)",
+                        "on-surface-variant": "var(--color-text-variant, #5f5f5a)",
+                        "secondary-fixed-dim": "#ccd7ce",
+                        "on-tertiary": "#fff7f5",
+                        "on-error-container": "#6e1400",
+                        "on-primary": "#fff7f5",
+                        "on-error": "#fff7f6",
+                        "surface-dim": "#dcdad4",
+                        "on-secondary-fixed": "#38423b",
+                        "surface-variant": "#e4e2dc",
+                        "outline": "#7b7b76",
+                        "primary-fixed-dim": "#efc3aa",
+                        "secondary": "#57625a",
+                        "on-tertiary-container": "#615450",
+                        "inverse-primary": "var(--color-primary-container, #fed1b7)",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-dim": "var(--color-primary, #6c4c39)",
+                        "surface-bright": "var(--color-surface, #fcf9f5)",
+                        "on-tertiary-fixed": "#4e423e",
+                        "on-background": "var(--color-text, #32332f)",
+                        "error": "#a73b21",
+                        "on-tertiary-fixed-variant": "#6c5e5a",
+                        "on-secondary-container": "#4a544d",
+                        "surface-container": "#f0eee8",
+                        "error-container": "#fd795a",
+                        "surface-tint": "#795844",
+                        "secondary-fixed": "#dae5dc",
+                        "tertiary-fixed": "#fbe7e2",
+                        "tertiary-dim": "#5d504d",
+                        "surface-container-high": "#eae8e2",
+                        "on-primary-fixed": "#503322",
+                        "inverse-on-surface": "#9e9d99",
+                        "outline-variant": "#b3b2ac",
+                        "inverse-surface": "#0e0e0c"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif", "serif"],
+                        "body": ["Manrope", "sans-serif"],
+                        "label": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { -webkit-font-smoothing: antialiased; }
+        html { scroll-behavior: smooth; }
+
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.active { transform: translateX(0); }
+
+        img { transition: filter 0.3s ease; }
+        img[loading="lazy"] { filter: blur(8px); }
+        img.loaded { filter: blur(0); }
+
+        /* Hero gradient blob */
+        @keyframes blobFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(10px, -15px) scale(1.05); }
+        }
+        .hero-blob { animation: blobFloat 6s ease-in-out infinite; }
+
+        /* Scroll indicator */
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(6px); opacity: 0.5; }
+        }
+        .scroll-indicator { animation: scrollBounce 1.8s ease-in-out infinite; }
+
+        /* Fade in on load */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.7s ease forwards; }
+        .fade-up-delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .fade-up-delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .fade-up-delay-3 { animation-delay: 0.35s; opacity: 0; }
+        .fade-up-delay-4 { animation-delay: 0.5s; opacity: 0; }
+
+        /* Masonry photo grid */
+        .gallery-masonry {
+            columns: 1;
+            column-gap: 1.25rem;
+        }
+        @media (min-width: 640px)  { .gallery-masonry { columns: 2; } }
+        @media (min-width: 1024px) { .gallery-masonry { columns: 3; } }
+        .gallery-item {
+            break-inside: avoid;
+            margin-bottom: 1.25rem;
+            transition: opacity 0.4s ease;
+        }
+        .gallery-item img {
+            display: block;
+            width: 100%;
+            border-radius: 0.875rem;
+            transition: transform 0.5s ease;
+        }
+        .gallery-item:hover img { transform: scale(1.03); }
+
+        /* Category tag on photo */
+        .photo-tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.2rem 0.6rem;
+            border-radius: 9999px;
+            margin-top: 0.5rem;
+        }
+        .tag-alkitab   { background: #dae5dc; color: #38423b; }
+        .tag-inspirasi { background: #fed1b7; color: #654633; }
+        .tag-doa       { background: #fbe7e2; color: #615450; }
+
+        /* Renungan cards */
+        .renungan-card {
+            background: #ffffff;
+            border-radius: 1.125rem;
+            padding: 2rem;
+            border: 1px solid rgba(179,178,172,0.2);
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
+        }
+        .renungan-card:hover {
+            box-shadow: 0 8px 32px rgba(121,88,68,0.1);
+            transform: translateY(-3px);
+        }
+        .renungan-divider {
+            height: 2px;
+            background: linear-gradient(90deg, #fed1b7, #dae5dc, #fbe7e2);
+            border-radius: 9999px;
+            width: 3rem;
+            margin-bottom: 1.25rem;
+        }
+    </style>
+</head>
+
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+
+    <!-- ═══ TOP NAVIGATION ═══════════════════════════════════════════════════ -->
+    <header class="bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-xl fixed top-0 w-full z-50 border-b border-stone-200/50 dark:border-stone-800/50">
+        <nav class="flex justify-between items-center w-full px-6 md:px-8 py-4 md:py-5 max-w-7xl mx-auto" aria-label="Main navigation">
+            <a href="#" class="text-xl md:text-2xl font-headline italic text-stone-900 dark:text-stone-50 hover:opacity-80 transition-opacity" aria-label="Home">
+                <span data-field="siteName">Dicky Wahyu</span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center space-x-8 lg:space-x-10">
+                <a class="text-stone-900 dark:text-stone-50 font-bold border-b-2 border-stone-400 dark:border-stone-600 pb-1 font-headline tracking-tight" href="#work">Work</a>
+                <a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-50 transition-colors font-headline tracking-tight" href="#gallery">Gallery</a>
+                <a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-50 transition-colors font-headline tracking-tight" href="#blog">Blog</a>
+                <a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-50 transition-colors font-headline tracking-tight" href="#contact">Contact</a>
+            </div>
+
+            <div class="flex items-center gap-2 md:gap-4">
+                <button id="darkModeToggle" class="material-symbols-outlined text-stone-800 dark:text-stone-100 p-2 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 active:scale-95 transition-all" aria-label="Toggle dark mode">dark_mode</button>
+                <button id="mobileMenuButton" class="md:hidden material-symbols-outlined text-stone-800 dark:text-stone-100 p-2 active:scale-95 transition-transform" aria-label="Toggle menu" aria-expanded="false">menu</button>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu Slide-in -->
+        <div id="mobileMenu" class="mobile-menu md:hidden fixed top-0 right-0 h-full w-64 bg-stone-50 dark:bg-stone-900 shadow-2xl z-50 p-6">
+            <button id="closeMobileMenu" class="material-symbols-outlined text-stone-800 dark:text-stone-100 mb-8 cursor-pointer" aria-label="Close menu">close</button>
+            <nav class="flex flex-col space-y-6" aria-label="Mobile navigation">
+                <a class="text-stone-900 dark:text-stone-50 font-bold font-headline tracking-tight text-lg hover:text-primary transition-colors" href="#work">Work</a>
+                <a class="text-stone-500 dark:text-stone-400 font-headline tracking-tight text-lg hover:text-stone-900 dark:hover:text-stone-50 transition-colors" href="#gallery">Gallery</a>
+                <a class="text-stone-500 dark:text-stone-400 font-headline tracking-tight text-lg hover:text-stone-900 dark:hover:text-stone-50 transition-colors" href="#blog">Blog</a>
+                <a class="text-stone-500 dark:text-stone-400 font-headline tracking-tight text-lg hover:text-stone-900 dark:hover:text-stone-50 transition-colors" href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-20 md:pt-24">
+
+        <!-- ═══ HERO SECTION ════════════════════════════════════════════════ -->
+        <section id="work" class="max-w-7xl mx-auto px-6 md:px-8 py-16 md:py-20 lg:py-32">
+            <div class="flex flex-col md:flex-row items-center gap-12 md:gap-16">
+
+                <!-- Hero Image -->
+                <div class="w-full md:w-1/2 relative fade-up fade-up-delay-1">
+                    <div class="aspect-[4/5] rounded-xl overflow-hidden bg-surface-container-low p-3 md:p-4">
+                        <img
+                            id="hero-image"
+                            alt="Portrait of Dicky Wahyu"
+                            class="w-full h-full object-cover rounded-lg grayscale hover:grayscale-0 transition-all duration-700 ease-in-out"
+                            src="https://picsum.photos/seed/dickywahyu/800/1000"
+                            loading="lazy"
+                        />
+                    </div>
+                    <!-- Decorative blobs -->
+                    <div class="hero-blob absolute -bottom-8 -right-8 w-40 h-40 md:w-48 md:h-48 bg-tertiary-container rounded-full mix-blend-multiply opacity-70 blur-2xl hidden md:block" aria-hidden="true"></div>
+                    <div class="hero-blob absolute -top-6 -left-6 w-28 h-28 bg-primary-container rounded-full mix-blend-multiply opacity-50 blur-2xl hidden md:block" aria-hidden="true" style="animation-delay: 3s;"></div>
+                </div>
+
+                <!-- Hero Text -->
+                <div class="w-full md:w-1/2 space-y-6 md:space-y-8">
+                    <span class="fade-up fade-up-delay-1 text-xs md:text-sm uppercase tracking-[0.2em] text-primary font-semibold block" id="hero-label">Digital Storyteller & Creative Curator</span>
+
+                    <h1 class="fade-up fade-up-delay-2 font-headline text-4xl md:text-5xl lg:text-7xl tracking-tight leading-[1.1] text-on-surface">
+                        <span data-field="ownerName">Dicky Wahyu</span>
+                    </h1>
+
+                    <p class="fade-up fade-up-delay-3 text-on-surface-variant text-base md:text-lg lg:text-xl max-w-lg leading-relaxed" data-field="bio">
+                        Crafting soulful narratives through intentional visuals.
+                    </p>
+
+                    <div class="fade-up fade-up-delay-4 flex flex-wrap gap-4 pt-4">
+                        <a href="#gallery" class="bg-gradient-to-r from-primary to-primary-dim text-on-primary px-8 md:px-10 py-3 md:py-4 rounded-full font-label font-semibold shadow-sm hover:scale-[1.02] active:scale-95 transition-transform">
+                            View Work
+                        </a>
+                        <a href="#contact" class="px-8 md:px-10 py-3 md:py-4 rounded-full font-label font-semibold border border-outline-variant/30 hover:bg-surface-container-low transition-colors">
+                            Contact Me
+                        </a>
+                    </div>
+
+                    <!-- Scroll indicator -->
+                    <div class="hidden md:flex items-center gap-3 pt-8 opacity-50">
+                        <div class="scroll-indicator w-5 h-8 border-2 border-outline-variant rounded-full flex items-start justify-center pt-1">
+                            <div class="w-1 h-2 bg-outline-variant rounded-full"></div>
+                        </div>
+                        <span class="text-xs text-on-surface-variant tracking-widest uppercase">Scroll</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ GALERI FOTO ════════════════════════════════════════════════ -->
+        <section id="gallery" class="bg-surface-container-low py-16 md:py-24 px-6 md:px-8 overflow-hidden">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header + Filter -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-14 gap-6">
+                    <div class="space-y-2">
+                        <span class="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Koleksi Visual</span>
+                        <h2 class="font-headline text-3xl md:text-4xl">Galeri Foto</h2>
+                        <p class="text-on-surface-variant text-sm md:text-base max-w-md">Foto-foto pilihan yang menangkap keindahan dan ketenangan.</p>
+                    </div>
+                    <!-- Filter Buttons -->
+                    <div class="flex flex-wrap gap-2 md:gap-3">
+                        <button class="filter-btn active px-4 md:px-6 py-2 rounded-full bg-secondary-container text-on-secondary-container font-label text-xs md:text-sm transition-all" data-filter="all">Semua</button>
+                        <button class="filter-btn px-4 md:px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label text-xs md:text-sm hover:bg-secondary-container transition-all" data-filter="alkitab">Alkitab</button>
+                        <button class="filter-btn px-4 md:px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label text-xs md:text-sm hover:bg-secondary-container transition-all" data-filter="inspirasi">Inspirasi</button>
+                        <button class="filter-btn px-4 md:px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label text-xs md:text-sm hover:bg-secondary-container transition-all" data-filter="doa">Doa</button>
+                    </div>
+                </div>
+                <!-- Masonry Photo Grid — populated by app.js -->
+                <div id="gallery-photo-grid" class="gallery-masonry">
+                    <!-- Populated by app.js -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ RENUNGAN & KATA BIJAK ══════════════════════════════════════ -->
+        <section id="renungan" class="py-16 md:py-24 px-6 md:px-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- Section Header -->
+                <div class="text-center mb-10 md:mb-14">
+                    <span class="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Kata-kata Pilihan</span>
+                    <h2 class="font-headline text-3xl md:text-4xl mt-3">Renungan &amp; Kata Bijak</h2>
+                    <p class="text-on-surface-variant text-sm md:text-base mt-3 max-w-xl mx-auto">Kumpulan pesan penuh makna dan ayat penyejuk jiwa untuk mengiringi langkah setiap hari.</p>
+                    <div class="w-16 h-1 bg-primary-container mx-auto rounded-full mt-5"></div>
+                </div>
+                <!-- Renungan Cards — populated by app.js -->
+                <div id="renungan-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Populated by app.js -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ CREATIVE FOCUS / BLOG ════════════════════════════════════════ -->
+        <section id="blog" class="py-16 md:py-24 px-6 md:px-8 max-w-7xl mx-auto">
+            <h2 class="font-headline text-3xl md:text-4xl mb-10 md:mb-12 text-center">Creative Focus</h2>
+            <!-- Populated by app.js -->
+            <div id="focus-cards-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"></div>
+        </section>
+
+        <!-- ═══ SKILLS SECTION ═══════════════════════════════════════════════ -->
+        <section class="py-16 md:py-24 px-6 md:px-8 max-w-7xl mx-auto">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="font-headline text-3xl md:text-4xl mb-4">Creative Skillset</h2>
+                <div class="w-20 md:w-24 h-1 bg-primary-container mx-auto rounded-full"></div>
+            </div>
+            <!-- Populated by app.js -->
+            <div id="skills-container" class="flex flex-wrap justify-center gap-4 md:gap-6"></div>
+        </section>
+
+        <!-- ═══ CTA / CONTACT ════════════════════════════════════════════════ -->
+        <section id="contact" class="py-20 md:py-32 px-6 md:px-8">
+            <div class="max-w-4xl mx-auto bg-primary-container/20 rounded-xl p-10 md:p-16 lg:p-20 text-center relative overflow-hidden">
+                <div class="absolute -top-20 -left-20 w-48 h-48 md:w-64 md:h-64 bg-primary-fixed opacity-20 blur-3xl rounded-full" aria-hidden="true"></div>
+                <div class="relative z-10">
+                    <h2 id="cta-title" class="font-headline text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8">Ready to tell your story?</h2>
+                    <p id="cta-description" class="text-base md:text-lg lg:text-xl text-on-surface-variant mb-10 md:mb-12 max-w-2xl mx-auto">
+                        I'm currently accepting new collaborations and freelance projects.
+                    </p>
+                    <div class="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-8">
+                        <a id="contact-email" data-field="email" class="text-xl md:text-2xl font-headline italic border-b-2 border-primary pb-1 hover:text-primary transition-colors break-all" href="mailto:hello@dickywahyu.com">
+                            hello@dickywahyu.com
+                        </a>
+                        <span class="hidden md:block text-outline-variant opacity-40" aria-hidden="true">|</span>
+                        <div class="flex gap-4 md:gap-6">
+                            <a data-social="instagram" class="text-on-surface-variant hover:text-primary transition-colors p-2" href="#" aria-label="Instagram">
+                                <span class="material-symbols-outlined">photo_camera</span>
+                            </a>
+                            <a data-social="tiktok" class="text-on-surface-variant hover:text-primary transition-colors p-2" href="#" aria-label="TikTok">
+                                <span class="material-symbols-outlined">movie</span>
+                            </a>
+                            <a data-social="youtube" class="text-on-surface-variant hover:text-primary transition-colors p-2" href="#" aria-label="YouTube">
+                                <span class="material-symbols-outlined">play_circle</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ═══ FOOTER ═══════════════════════════════════════════════════════════ -->
+    <footer class="bg-stone-100 dark:bg-stone-950 w-full py-10 md:py-12 px-6 md:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-7xl mx-auto">
+            <div class="text-base md:text-lg font-headline italic text-stone-900 dark:text-stone-50" data-field="siteName">Dicky Wahyu</div>
+            <nav class="flex flex-wrap justify-center gap-6 md:gap-8 text-xs md:text-sm" aria-label="Footer navigation">
+                <a data-social="instagram" class="text-stone-500 dark:text-stone-400 hover:underline underline-offset-4 transition-opacity" href="#">Instagram</a>
+                <a data-social="tiktok"    class="text-stone-500 dark:text-stone-400 hover:underline underline-offset-4 transition-opacity" href="#">TikTok</a>
+                <a data-social="youtube"   class="text-stone-500 dark:text-stone-400 hover:underline underline-offset-4 transition-opacity" href="#">YouTube</a>
+                <a data-social="linkedin"  class="text-stone-500 dark:text-stone-400 hover:underline underline-offset-4 transition-opacity" href="#">LinkedIn</a>
+            </nav>
+            <div class="text-stone-700 dark:text-stone-300 text-xs md:text-sm">
+                © 2025 <span data-field="siteName">Dicky Wahyu</span>. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Config & App Scripts -->
+    <script src="config.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>

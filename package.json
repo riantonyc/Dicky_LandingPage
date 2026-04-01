@@ -1,0 +1,21 @@
+{
+  "name": "dicky_landing_page",
+  "version": "1.0.0",
+  "description": "Sebuah situs portofolio personal yang elegan, dirancang khusus untuk koleksi visual (Galeri Foto) dan tulisan berharga (Renungan & Kata Bijak). Situs ini dilengkapi dengan **Hidden Admin Panel** yang memungkinkan pemilik mengubah semua konten secara mandiri tanpa menyentuh kode (\"Data-Driven\").",
+  "main": "config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@vercel/postgres": "^0.10.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "jsonwebtoken": "^9.0.3",
+    "resend": "^6.10.0"
+  }
+}
