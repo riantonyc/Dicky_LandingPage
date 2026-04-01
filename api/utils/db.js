@@ -1,15 +1,14 @@
+// Mencegah Node.js menolak sertifikat self-signed dari Supabase
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 const { Pool } = require('pg');
 
-// Gunakan koneksi dari Vercel/Supabase
-const connectionString = 
-  process.env.POSTGRES_URL || 
-  process.env.SUPABASE_URL || 
-  process.env.DATABASE_URL;
+const rawUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
 
 const pool = new Pool({
-  connectionString,
+  connectionString: rawUrl,
   ssl: {
-    rejectUnauthorized: false
+    rejectUnauthorized: false // Paksa matikan validasi sertifikat strict
   }
 });
 
