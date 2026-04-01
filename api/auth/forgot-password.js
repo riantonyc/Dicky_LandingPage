@@ -1,74 +1,56 @@
-const { sql } = require('@vercel/postgres');
-const crypto = require('crypto');
+const db = require('../utils/db');
 const { Resend } = require('resend');
+const crypto = require('crypto');
 
-const resendLocal = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 module.exports = async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed' });
-  }
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
+
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: 'Email required' });
 
   try {
-    const { email } = req.body;
-
-    if (!email) {
-      return res.status(400).json({ error: 'Email is required' });
-    }
-
-    const { rows } = await sql`
-      SELECT id, email
-      FROM users
-      WHERE email = ${email};
-    `;
-
+    const { rows } = await db.query('SELECT id, email FROM users WHERE email = $1', [email]);
+        
+    // Always return success to prevent email enumeration, even if user doesn't exist
     if (rows.length === 0) {
-      // Return 200 even if user not found to prevent email enumeration
-      return res.status(200).json({ message: 'If that admin email exists, a reset link has been sent.' });
+      return res.status(200).json({ message: 'If email exists, reset link sent.' });
     }
 
-    const user = rows[0];
-
-    // Generate a secure token
-    const token = crypto.randomBytes(32).toString('hex');
+    const unhashedToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto.createHash('sha256').update(unhashedToken).digest('hex');
     const expires = Date.now() + 3600000; // 1 hour
 
-    await sql`
-      UPDATE users
-      SET reset_token = ${token}, reset_expires = ${expires}
-      WHERE id = ${user.id};
-    `;
+    await db.query(
+      'UPDATE users SET reset_token = $1, reset_expires = $2 WHERE email = $3',
+      [hashedToken, expires, email]
+    );
 
-    // The reset link URL
-    const baseUrl = process.env.PUBLIC_URL || req.headers.origin || 'http://localhost:5500';
-    const resetLink = `${baseUrl}/admin.html?reset_token=${token}`;
+    const protocol = req.headers['x-forwarded-proto'] || 'http';
+    const host = req.headers.host;
+    const resetUrl = `${protocol}://${host}/admin.html?reset_token=${unhashedToken}`;
 
     if (process.env.RESEND_API_KEY) {
-      try {
-        await resendLocal.emails.send({
-          from: 'Admin <onboarding@resend.dev>', // Use correct domain when moving to prod
-          to: [user.email],
-          subject: 'Admin Portfolio - Reset Password',
-          html: `
-            <h3>Reset Password Request</h3>
-            <p>You requested to reset your password for the Admin Portfolio Panel.</p>
-            <p>Click the link below to set a new password:</p>
-            <a href="${resetLink}">${resetLink}</a>
-            <p>This link will expire in 1 hour.</p>
-            <p>If you did not request this, please ignore this email.</p>
-          `
-        });
-      } catch (e) {
-        console.error("Resend API failed", e);
-      }
+      await resend.emails.send({
+        from: 'onboarding@resend.dev',
+        to: email,
+        subject: 'Reset Password - Dicky Wahyu Admin',
+        html: `
+          <h3>Permintaan Reset Password</h3>
+          <p>Seseorang meminta reset password untuk akun admin Anda.</p>
+          <p>Silakan klik link di bawah ini untuk membuat sandi baru (Valid selama 1 jam):</p>
+          <a href="${resetUrl}">${resetUrl}</a>
+          <br><p>Abaikan email ini jika Anda tidak memintanya.</p>
+        `
+      });
     } else {
-      console.log('NO RESEND API KEY SET. Would have sent:', resetLink);
+      console.log('NO RESEND API KEY FOUND. RESET URL:', resetUrl);
     }
 
-    return res.status(200).json({ message: 'If that admin email exists, a reset link has been sent.' });
-
+    return res.status(200).json({ message: 'If email exists, reset link sent.' });
   } catch (error) {
     console.error('Forgot password error:', error);
-    return res.status(500).json({ error: 'Failed to process request' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };

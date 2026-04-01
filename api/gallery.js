@@ -1,43 +1,37 @@
-const { sql } = require('@vercel/postgres');
+const db = require('./utils/db');
 const verifyAuth = require('./utils/auth');
 
 module.exports = async function handler(req, res) {
   try {
     if (req.method === 'GET') {
-      const { rows } = await sql`SELECT * FROM gallery;`;
+      const { rows } = await db.query('SELECT * FROM gallery');
       return res.status(200).json(rows);
     }
     
-    // Auth protected actions
-    try {
-      verifyAuth(req);
-    } catch (err) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+    try { verifyAuth(req); } catch (err) { return res.status(401).json({ error: 'Unauthorized' }); }
 
     if (req.method === 'POST') {
       const { id, src, alt, caption, category } = req.body;
-      await sql`
-        INSERT INTO gallery (id, src, alt, caption, category)
-        VALUES (${id}, ${src}, ${alt}, ${caption}, ${category});
-      `;
+      await db.query(
+        'INSERT INTO gallery (id, src, alt, caption, category) VALUES ($1, $2, $3, $4, $5)',
+        [id, src, alt, caption, category]
+      );
       return res.status(201).json({ message: 'Gallery item created' });
     }
 
     if (req.method === 'PUT') {
       const { id, src, alt, caption, category } = req.body;
-      await sql`
-        UPDATE gallery
-        SET src = ${src}, alt = ${alt}, caption = ${caption}, category = ${category}
-        WHERE id = ${id};
-      `;
+      await db.query(
+        'UPDATE gallery SET src = $1, alt = $2, caption = $3, category = $4 WHERE id = $5',
+        [src, alt, caption, category, id]
+      );
       return res.status(200).json({ message: 'Gallery item updated' });
     }
 
     if (req.method === 'DELETE') {
-      const { id } = req.query; // e.g. /api/gallery?id=123
+      const { id } = req.query;
       if (!id) return res.status(400).json({ error: 'ID required' });
-      await sql`DELETE FROM gallery WHERE id = ${id};`;
+      await db.query('DELETE FROM gallery WHERE id = $1', [id]);
       return res.status(200).json({ message: 'Gallery item deleted' });
     }
 

@@ -1,43 +1,37 @@
-const { sql } = require('@vercel/postgres');
+const db = require('./utils/db');
 const verifyAuth = require('./utils/auth');
 
 module.exports = async function handler(req, res) {
   try {
     if (req.method === 'GET') {
-      const { rows } = await sql`SELECT * FROM renungan;`;
+      const { rows } = await db.query('SELECT * FROM renungan');
       return res.status(200).json(rows);
     }
     
-    // Auth protected actions
-    try {
-      verifyAuth(req);
-    } catch (err) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+    try { verifyAuth(req); } catch (err) { return res.status(401).json({ error: 'Unauthorized' }); }
 
     if (req.method === 'POST') {
       const { id, title, content, source, category } = req.body;
-      await sql`
-        INSERT INTO renungan (id, title, content, source, category)
-        VALUES (${id}, ${title}, ${content}, ${source}, ${category});
-      `;
+      await db.query(
+        'INSERT INTO renungan (id, title, content, source, category) VALUES ($1, $2, $3, $4, $5)',
+        [id, title, content, source, category]
+      );
       return res.status(201).json({ message: 'Renungan item created' });
     }
 
     if (req.method === 'PUT') {
       const { id, title, content, source, category } = req.body;
-      await sql`
-        UPDATE renungan
-        SET title = ${title}, content = ${content}, source = ${source}, category = ${category}
-        WHERE id = ${id};
-      `;
+      await db.query(
+        'UPDATE renungan SET title = $1, content = $2, source = $3, category = $4 WHERE id = $5',
+        [title, content, source, category, id]
+      );
       return res.status(200).json({ message: 'Renungan item updated' });
     }
 
     if (req.method === 'DELETE') {
       const { id } = req.query;
       if (!id) return res.status(400).json({ error: 'ID required' });
-      await sql`DELETE FROM renungan WHERE id = ${id};`;
+      await db.query('DELETE FROM renungan WHERE id = $1', [id]);
       return res.status(200).json({ message: 'Renungan item deleted' });
     }
 
