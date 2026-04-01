@@ -98,9 +98,6 @@
         }
         .mobile-menu.active { transform: translateX(0); }
 
-        img { transition: filter 0.3s ease; }
-        img[loading="lazy"] { filter: blur(8px); }
-        img.loaded { filter: blur(0); }
 
         /* Hero gradient blob */
         @keyframes blobFloat {
@@ -184,13 +181,13 @@
     </style>
 </head>
 
-<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container" style="opacity: 0; transition: opacity 0.4s ease;">
 
     <!-- ═══ TOP NAVIGATION ═══════════════════════════════════════════════════ -->
     <header class="bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-xl fixed top-0 w-full z-50 border-b border-stone-200/50 dark:border-stone-800/50">
         <nav class="flex justify-between items-center w-full px-6 md:px-8 py-4 md:py-5 max-w-7xl mx-auto" aria-label="Main navigation">
             <a href="#" class="text-xl md:text-2xl font-headline italic text-stone-900 dark:text-stone-50 hover:opacity-80 transition-opacity" aria-label="Home">
-                <span data-field="siteName">Dicky Wahyu</span>
+                <span data-field="ownerName">Dicky Wahyu</span>
             </a>
 
             <!-- Desktop Nav -->
@@ -366,7 +363,7 @@
     <!-- ═══ FOOTER ═══════════════════════════════════════════════════════════ -->
     <footer class="bg-stone-100 dark:bg-stone-950 w-full py-10 md:py-12 px-6 md:px-8">
         <div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-7xl mx-auto">
-            <div class="text-base md:text-lg font-headline italic text-stone-900 dark:text-stone-50" data-field="siteName">Dicky Wahyu</div>
+            <div class="text-base md:text-lg font-headline italic text-stone-900 dark:text-stone-50" data-field="ownerName">Dicky Wahyu</div>
             <nav class="flex flex-wrap justify-center gap-6 md:gap-8 text-xs md:text-sm" aria-label="Footer navigation">
                 <a data-social="instagram" class="text-stone-500 dark:text-stone-400 hover:underline underline-offset-4 transition-opacity" href="#">Instagram</a>
                 <a data-social="tiktok"    class="text-stone-500 dark:text-stone-400 hover:underline underline-offset-4 transition-opacity" href="#">TikTok</a>
@@ -374,7 +371,7 @@
                 <a data-social="linkedin"  class="text-stone-500 dark:text-stone-400 hover:underline underline-offset-4 transition-opacity" href="#">LinkedIn</a>
             </nav>
             <div class="text-stone-700 dark:text-stone-300 text-xs md:text-sm">
-                © 2025 <span data-field="siteName">Dicky Wahyu</span>. All rights reserved.
+                © 2025 <span data-field="ownerName">Dicky Wahyu</span>. All rights reserved.
             </div>
         </div>
     </footer>

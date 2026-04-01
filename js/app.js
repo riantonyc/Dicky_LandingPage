@@ -92,6 +92,11 @@
     initLazyLoad();
     initSmoothScroll();
     initAdminShortcut();
+    
+    // Reveal body safely after DOM is fully populated
+    setTimeout(function() {
+      document.body.style.opacity = '1';
+    }, 50);
   });
 
   // ─── Render Functions ────────────────────────────────────────────────────────
