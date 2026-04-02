@@ -687,136 +687,34 @@
 <body>
 
     <!-- ═══════════════════════════════════════════════════════════════════════════
-     SETUP SCREEN — First-time password setup
-════════════════════════════════════════════════════════════════════════════ -->
-    <div id="screen-setup" style="display:none;" class="min-h-screen flex items-center justify-center p-4"
-        style="background: linear-gradient(135deg, #fcf9f5 0%, #f0eee8 100%);">
-        <div class="auth-card">
-            <div class="auth-logo mb-1">Dicky Wahyu</div>
-            <p class="text-xs text-on-surface-variant mb-6">Admin Panel — Setup Pertama</p>
-
-            <div class="bg-secondary-container text-on-secondary-container rounded-xl p-4 mb-6 text-sm">
-                <div class="flex gap-2">
-                    <span class="material-symbols-outlined text-base flex-shrink-0">info</span>
-                    <span>Buat password untuk Admin Panel Anda. Password akan di-<strong>hash</strong> menggunakan
-                        SHA-256 dan tidak pernah disimpan dalam bentuk aslinya.</span>
-                </div>
-            </div>
-
-            <form id="setup-form" novalidate>
-                <div class="form-group">
-                    <label class="form-label" for="setup-password">Password Baru (min. 8 karakter)</label>
-                    <div class="pw-wrapper">
-                        <input type="password" id="setup-password" class="input-field"
-                            placeholder="Buat password yang kuat" required autocomplete="new-password" />
-                        <button type="button" id="toggle-setup-pw"
-                            class="pw-toggle material-symbols-outlined">visibility</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="setup-confirm">Konfirmasi Password</label>
-                    <div class="pw-wrapper">
-                        <input type="password" id="setup-confirm" class="input-field" placeholder="Ulangi password"
-                            required autocomplete="new-password" />
-                        <button type="button" id="toggle-setup-confirm"
-                            class="pw-toggle material-symbols-outlined">visibility</button>
-                    </div>
-                </div>
-                <div id="setup-error" class="field-error mb-3"></div>
-                <button type="submit" class="btn-primary">
-                    <span class="material-symbols-outlined text-sm">lock</span>
-                    Buat Password & Masuk
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════════
      LOGIN SCREEN
 ════════════════════════════════════════════════════════════════════════════ -->
     <div id="screen-login" style="display:none;" class="min-h-screen flex flex-col items-center justify-center p-4"
         style="background: linear-gradient(135deg, #fcf9f5 0%, #f0eee8 100%);">
         <div class="auth-card">
             <div class="auth-logo mb-1">Dicky Wahyu</div>
-            <p class="text-xs text-on-surface-variant mb-8">Admin Panel — Masuk untuk melanjutkan</p>
+            <p class="text-xs text-on-surface-variant mb-8">Admin Panel — Masuk dengan Token Akses</p>
 
             <form id="login-form" novalidate>
                 <div class="form-group">
-                    <label class="form-label" for="login-email">Email Admin</label>
-                    <input type="email" id="login-email" class="input-field" placeholder="Masukkan email admin" required
-                        autocomplete="email" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="login-password">Password Admin</label>
+                    <label class="form-label" for="login-token">Secret Access Token</label>
                     <div class="pw-wrapper">
-                        <input type="password" id="login-password" class="input-field"
-                            placeholder="Masukkan password Anda" required autocomplete="current-password" />
-                        <button type="button" id="toggle-login-pw"
+                        <input type="password" id="login-token" class="input-field"
+                            placeholder="Masukkan token rahasia" required autocomplete="current-password" />
+                        <button type="button" id="toggle-login-token"
                             class="pw-toggle material-symbols-outlined">visibility</button>
                     </div>
                 </div>
                 <div id="login-error" class="field-error mb-3"></div>
                 <button type="submit" class="btn-primary">
                     <span class="material-symbols-outlined text-sm">login</span>
-                    Masuk
+                    Akses Dashboard
                 </button>
-                <div class="text-center mt-3">
-                    <button type="button" id="btn-show-forgot"
-                        class="text-xs text-primary hover:underline bg-transparent border-none cursor-pointer p-0">Lupa
-                        Password?</button>
-                </div>
             </form>
 
             <p class="text-xs text-on-surface-variant text-center mt-6">
                 <a href="index.html" class="hover:underline">← Kembali ke portofolio</a>
             </p>
-        </div>
-    </div>
-
-
-    <!-- ═══════════════════════════════════════════════════════════════════════════
-     FORGOT PASSWORD SCREEN
-════════════════════════════════════════════════════════════════════════════ -->
-    <div id="screen-forgot" style="display:none;" class="min-h-screen flex flex-col items-center justify-center p-4">
-        <div class="auth-card">
-            <div class="auth-logo mb-1">Dicky Wahyu</div>
-            <p class="text-xs text-on-surface-variant mb-6">Reset Password Admin</p>
-            <p class="text-sm text-on-surface-variant mb-6">Masukkan email Anda untuk menerima link pemulihan password.
-            </p>
-            <form id="forgot-form" novalidate>
-                <div class="form-group">
-                    <label class="form-label" for="forgot-email">Email Admin</label>
-                    <input type="email" id="forgot-email" class="input-field" placeholder="Email terdaftar" required />
-                </div>
-                <button type="submit" class="btn-primary mb-3">Kirim Link Reset</button>
-                <div class="text-center">
-                    <button type="button" id="btn-back-login"
-                        class="text-xs text-on-surface-variant hover:underline bg-transparent border-none cursor-pointer">←
-                        Kembali Login</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════════
-     RESET PASSWORD SCREEN
-════════════════════════════════════════════════════════════════════════════ -->
-    <div id="screen-reset" style="display:none;" class="min-h-screen flex flex-col items-center justify-center p-4">
-        <div class="auth-card">
-            <div class="auth-logo mb-1">Dicky Wahyu</div>
-            <p class="text-xs text-on-surface-variant mb-6">Buat Password Baru</p>
-            <form id="reset-form" novalidate>
-                <div class="form-group">
-                    <label class="form-label" for="reset-new-pw">Password Baru</label>
-                    <div class="pw-wrapper">
-                        <input type="password" id="reset-new-pw" class="input-field" placeholder="Minimal 8 karakter"
-                            required />
-                        <button type="button" id="toggle-reset-pw"
-                            class="pw-toggle material-symbols-outlined">visibility</button>
-                    </div>
-                </div>
-                <button type="submit" class="btn-primary">Simpan Password Baru</button>
-            </form>
         </div>
     </div>
 

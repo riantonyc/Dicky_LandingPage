@@ -82,7 +82,7 @@
   }
 
   function showScreen(name) {
-    ['screen-setup', 'screen-login', 'screen-forgot', 'screen-reset', 'screen-dashboard'].forEach(function(s) { hideEl(s); });
+    ['screen-login', 'screen-dashboard'].forEach(function(s) { hideEl(s); });
     showEl('screen-' + name);
   }
 
@@ -91,18 +91,11 @@
 
   // ─── Init ────────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
-    var urlParams = new URLSearchParams(window.location.search);
-    var resetToken = urlParams.get('reset_token');
-
-    if (resetToken) {
-      initResetScreen(resetToken);
-      showScreen('reset');
-    } else if (isLoggedIn()) {
+    if (isLoggedIn()) {
       showScreen('dashboard');
       initDashboard();
     } else {
       initLoginScreen();
-      initForgotScreen();
       showScreen('login');
     }
   });
@@ -114,8 +107,7 @@
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
-      var email = document.getElementById('login-email').value;
-      var pw = document.getElementById('login-password').value;
+      var token = document.getElementById('login-token').value;
       var btn = form.querySelector('button[type="submit"]');
 
       setError('login-error', '');
@@ -124,13 +116,11 @@
       try {
         var res = await apiFetch('/api/auth/login', {
           method: 'POST',
-          body: JSON.stringify({ email: email, password: pw })
+          body: JSON.stringify({ token: token })
         });
         localStorage.setItem(TOKEN_KEY, res.token);
         
-        // Remove email/password from input fields
-        document.getElementById('login-email').value = '';
-        document.getElementById('login-password').value = '';
+        document.getElementById('login-token').value = '';
 
         showScreen('dashboard');
         initDashboard();
@@ -141,69 +131,10 @@
       }
     });
 
-    // Togglers
-    initPasswordToggle('login-password', 'toggle-login-pw');
-    
-    // Forgot Password link
-    var forgotBtn = document.getElementById('btn-show-forgot');
-    if (forgotBtn) forgotBtn.onclick = function() { showScreen('forgot'); };
+    initPasswordToggle('login-token', 'toggle-login-token');
   }
 
-  function initForgotScreen() {
-    var form = document.getElementById('forgot-form');
-    var backBtn = document.getElementById('btn-back-login');
-    if (backBtn) backBtn.onclick = function() { showScreen('login'); };
 
-    if (!form) return;
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      var email = document.getElementById('forgot-email').value;
-      var btn = form.querySelector('button[type="submit"]');
-      btn.disabled = true; btn.textContent = 'Mengirim...';
-
-      try {
-        var res = await fetch('/api/auth/forgot-password', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({email: email})
-        });
-        showToast('Jika email terdaftar, link pemulihan telah dikirim (cek inbox).', 'success');
-        showScreen('login');
-      } catch (err) {
-        showToast('Gagal mengirim link', 'error');
-      } finally {
-        btn.disabled = false; btn.textContent = 'Kirim Link Reset';
-      }
-    });
-  }
-
-  function initResetScreen(token) {
-    var form = document.getElementById('reset-form');
-    if (!form) return;
-    initPasswordToggle('reset-new-pw', 'toggle-reset-pw');
-
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      var newPw = document.getElementById('reset-new-pw').value;
-      var btn = form.querySelector('button[type="submit"]');
-      btn.disabled = true; btn.textContent = 'Menyimpan...';
-
-      try {
-        var res = await fetch('/api/auth/reset-password', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({token: token, newPassword: newPw})
-        });
-        if(!res.ok) throw new Error(await res.text());
-        showToast('Password berhasil direset. Silakan login.');
-        showScreen('login');
-        // Clear url params
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } catch (err) {
-        showToast('Gagal mereset password. Link kedaluwarsa?', 'error');
-      } finally {
-        btn.disabled = false; btn.textContent = 'Simpan Password Baru';
-      }
-    });
-  }
 
   function initPasswordToggle(inputId, btnId) {
     var btn = document.getElementById(btnId);
