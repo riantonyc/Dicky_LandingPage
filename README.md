@@ -1,74 +1,76 @@
-# Dicky Wahyu — Portfolio & Admin Panel
+# Dicky Wahyu — Portfolio & Serverless Admin Panel
 
-Sebuah situs portofolio personal yang elegan, dirancang khusus untuk koleksi visual (Galeri Foto) dan tulisan berharga (Renungan & Kata Bijak). Situs ini dilengkapi dengan **Hidden Admin Panel** yang memungkinkan pemilik mengubah semua konten secara mandiri tanpa menyentuh kode ("Data-Driven").
-
-Penyimpanan data memanfaatkan teknologi web modern yaitu **localStorage** dari peramban (browser).
-
-## ✨ Fitur Utama
-
-- **Tampilan Premium & Responsif:** Desain modern, minimalis, dengan transisi animasi yang mulus. Bekerja sempurna di Desktop, Tablet, dan Mobile.
-- **Pemisahan Konten:** Galeri foto dengan layout masonry yang terfilter, berdampingan namun terpisah rapi dengan grid kartu khusus untuk kutipan/renungan teks.
-- **Panel Admin Tersembunyi:** Sistem mandiri untuk mengelola portofolio tanpa server backend.
-- **Autentikasi Aman:** Password admin dilindungi menggunakan _Web Crypto API_ (Hashing SHA-256) ditambah Salt.
-- **Data-Driven:** Mengelola Profile (Bio, Link Sosmed, Tagline), Gambar Galeri (Alkitab, Inspirasi, Doa), dan Teks Renungan/Kutipan secara dinamis.
-- **Fitur Export & Import:** Karena data disimpan di browser secara lokal (`localStorage`), tersedia opsi Back-up (Export JSON) dan Restore (Import JSON) untuk sinkronisasi perpindahan device/browser.
-
-## 🛠️ Tech Stack
-
-- **HTML5** murni (Struktur)
-- **Tailwind CSS** via CDN (Styling dan Utilities)
-- **Vanilla JavaScript** (Logika Frontend dan Admin CRUD)
-- **Kriptografi Asli Browser** (Web Crypto API)
+Sebuah situs portofolio personal yang elegan, dirancang khusus untuk koleksi visual (Galeri Foto) dan tulisan berharga (Renungan & Kata Bijak). Situs ini dilengkapi dengan **Hidden Admin Panel** yang memungkinkan pemilik mengubah semua konten secara mandiri menggunakan **Vercel Serverless Functions** dan **PostgreSQL**.
 
 ---
 
-## 🚀 Cara Menjalankan Project
+## 🛠️ Teknologi yang Digunakan
 
-Jika Anda membuka file HTML secara langsung (klik ganda file `index.html`), ada kemungkinan beberapa browser akan memblokir fungsi penyimpanan lokal atau *loading* file terkait kebijakan [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) untuk protokol `file:///`.
+Proyek ini telah diperbarui dari arsitektur lokal murni ke arsitektur web full-stack modern.
 
-Untuk menjalankan website ini dengan sempurna, sangat disarankan untuk menggunakan _Local Web Server_.
+- **Frontend**: HTML5, Vanilla JavaScript, Tailwind CSS (via CDN).
+- **Backend / API**: Serverless API Node.js (via Vercel Functions).
+- **Database**: PostgreSQL (via modul `pg`), digunakan untuk menyimpan Galeri, Renungan, dan Konfigurasi Profil.
+- **Autentikasi**: JWT (JSON Web Tokens) dan **Single Secret Token** (`timingSafeEqual`) menggunakan `crypto` untuk masuk ke halaman Dashboard, menjadikan panel admin sangat aman terhadap injeksi atau pembajakan akun.
 
-### Metode 1: Menggunakan Python (Termudah)
-Jika PC Anda sudah memiliki Python, jalankan perintah berikut di terminal (Arahkan terminal ke dalam folder folder `Dicky_Landing_page`):
+---
 
+## ⚙️ Alur Kerja Aplikasi
+
+1. **Pengunjung (Frontend)**
+   - Saat halaman portofolio (`index.html`) dibuka, JavaScript akan melakukan *fetch* (`GET`) secara asinkronus ke rute `/api/gallery`, `/api/renungan`, dan `/api/settings`.
+   - Vercel memproses *request* tersebut, meminta data dari _Database PostgreSQL_, dan mengirimkannya kembali dalam bentuk format JSON untuk dirender ke layar, memastikan website Anda bersifat dinamis (Data-Driven).
+
+2. **Pemilik (Admin Panel)**
+   - Halaman admin (`admin.html`) diamankan hanya dengan **Satu Token Akses Rahasia**. Tidak memakan *database user* menggunakan email/login tradisional yang gampang diretas.
+   - Apabila login token divalidasi ke sisi Backend menghasilkan kecocokan (`DICKY_PW`), backend melempar token sementara (JWT).
+   - Seluruh pengubahan seperti *(Create, Update, Delete)* akan dikirim dengan membawa JWT tersebut agar disetujui server untuk dimanipulasi pada postgreSQL.
+
+---
+
+## 🚀 Cara Menjalankan & Install
+
+Karena aplikasi ini bergantung erat dengan fitur *Serverless* Vercel dan Environment Variable API, sangat dilarang untuk menggunakan Live Server / ekstensi HTTP server biasa dari VSCode!
+
+### 1. Kebutuhan Instalasi
+- Pastikan komputer Anda telah menginstal **Node.js**: [Download](https://nodejs.org/)
+- Akun Database **PostgreSQL** yang sudah berjalan (Supabase/Neon/Local).
+
+### 2. Panduan Setup Lokal
+Jalankan langkah-langkah di bawah di Terminal Anda secara berurutan:
+
+1. **Install Modul Node.js**
+   ```bash
+   npm install
+   ```
+2. **Setup Vercel CLI (Global)**
+   Jika belum ada program vercel, install secara global:
+   ```bash
+   npm install -g vercel
+   ```
+3. **Mempersiapkan File Rahasia (\`.env.local\`)**
+   Buatlah sebuah berkas bernama `.env.local` pada urutan paling dasar/sejajar di dalam folder ini (disebelah folder `api`). Berikan kunci-kunci berikut (Ubah valuenya sesuai setinggan aslinya):
+   ```env
+   # PostgreSQL Connection 
+   DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/DATABASE_NAME
+   
+   # Rahasia Khusus Panel Admin Anda
+   DICKY_PW=KetikKataSandiRahasiaAndaDisini
+   
+   # JWT Rahasia (Bebas)
+   JWT_SECRET=super_rahasia_stempel
+   ```
+
+### 3. Mulai Simulasikan!
+Ketika Setup selesai, nyalakan server *Development* resmi milik Vercel:
 ```bash
-python -m http.server 5500
+npx vercel dev
 ```
-Kemudian buka browser dan navigasikan ke: `http://localhost:5500`
+Setelah jalan (muncul tulisan `Ready`), segera buka Browser favorit Anda dan akses:
+- **Portofolio Utama**: `http://localhost:3000`
+- **Akses Admin**: `http://localhost:3000/admin.html`
 
-### Metode 2: Menggunakan VS Code (Live Server)
-1. Buka folder project ini di **Visual Studio Code**.
-2. Install ekstensi **Live Server** (oleh Ritwick Dey).
-3. Buka file `index.html`.
-4. Klik tombol **"Go Live"** di bilah bawah VS Code atau klik kanan lalu pilih *"Open with Live Server"*.
+Segala perubahan/tulisan baru yang Anda rubah dan Save di komputer lokal akan terekam ke Backend Localhost layaknya *Live Website Server*. 
 
 ---
-
-## ⚙️ Menggunakan Admin Panel
-
-### 1. Masuk ke Panel Admin
-Anda dapat masuk ke dalam dashboard admin menggunakan 2 cara:
-1. Menambahkan `/admin.html` di bilah *address/URL* peramban (Contoh: `http://localhost:5500/admin.html`).
-2. Menggunakan **Shortcut Pintar** dari halaman utama (`index.html`): Tekan tombol **`Ctrl + Shift + A`** pada keyboard secara bersamaan.
-
-### 2. Setup Awal Admin (Pertama Kali)
-Saat Anda masuk ke akses Admin pertama kalinya, sistem mendeteksi belum ada password terdaftar.
-- Masukkan *password* baru pilihan Anda (minimal 8 karakter).
-- Klik "Buat Password".
-- Mulai dari saat ini, ini adalah satu-satunya password untuk mengakses dashboard! Jika Anda lupa, Anda harus menghapus "Local Storage" melalui *developer tools* peramban.
-
-### 3. Mengatur Konten (CRUD)
-- Di dalam dashboard admin, Anda akan menemui tab **Galeri Foto**, **Renungan**, dan **Profil**.
-- Pilih tab yang diinginkan, kemudian klik tombol **"Tambah"** atau klik menu **"Edit"** atau **"Hapus"** pada setiap item konten yang ada.
-- Gambar foto dapat dimasukkan melalui unggahan berkas (akan berubah menjadi Data URL otomatis) atau langsung ditempel melalui *Link URL*.
-- **Refresh / Muat Ulang:** Semua perubahan yang Anda *Simpan* di panel Admin, akan **langsung otomatis diperbarui** di halaman utama pengunjung (`index.html`).
-
-### 4. Ekspor (Backup) Data Pengaturan
-Dikarenakan ini merupakan _Database Lokal_, sewaktu-waktu bisa saja terhapus apabila pengaturan browser Anda melakukan kliring Riwayat (Clear Cookie/Cache). Sangat disarankan untuk:
-- Buka Menu **Pengaturan** di admin.
-- Klik **Export JSON**. Anda akan mendapatkan file unduhan. Simpan file ini dengan baik.
-- Apabila Anda berpindah perangkat atau kehilangan progress portofolio, Anda hanya perlu klik **Import JSON** dan mengunggah kembali file tersebut untuk mengembalikan semua portofolio Anda utuh!
-
----
-
-
+*Kode dan Dokumentasi terakhir diperbarui pada 2026/04/02.*
