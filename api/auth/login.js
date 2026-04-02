@@ -8,9 +8,9 @@ module.exports = async function handler(req, res) {
   if (!token) return res.status(400).json({ error: 'Token required' });
 
   try {
-    const adminToken = process.env.ADMIN_TOKEN || '';
+    const adminToken = process.env.DICKY_PW || process.env.ADMIN_TOKEN || '';
     if (!adminToken) {
-      console.warn('WARNING: ADMIN_TOKEN env variable is not set!');
+      console.warn('WARNING: DICKY_PW env variable is not set!');
       return res.status(500).json({ error: 'Server auth misconfiguration' });
     }
 
